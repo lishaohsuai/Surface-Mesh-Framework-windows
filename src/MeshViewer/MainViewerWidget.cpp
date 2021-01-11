@@ -37,6 +37,7 @@ void MainViewerWidget::initViewerWindow()
 	connect(MeshViewer,SIGNAL(set_edit_redo_enable_viewer_signal(bool)),SIGNAL(set_edit_redo_enable_signal(bool)));
 
 	connect(MeshParam, SIGNAL(print_info_signal()), SLOT(print_info()));
+	connect(MeshParam, SIGNGAL(open_fgraph_signal()), SLOT(open_fgraph()));
 }
 
 void MainViewerWidget::createParamIDialog()
@@ -102,4 +103,41 @@ void MainViewerWidget::save_screen_gui(QString fname)
 void MainViewerWidget::print_info()
 {
 	MeshViewer->printBasicMeshInfo();
+}
+
+void MainViewerWidget::open_fgraph()
+{
+
+	QString fileName = QFileDialog::getOpenFileName(this,
+			tr("open fgraph file"),
+			tr("../"),
+			tr("FGRAPH Files (*.fgraph);;"
+			"All Files (*)"));
+	if (!fileName.isEmpty())
+	{
+		if(!open_fgraph_impl(fileName)){
+			QString msg = "Cannot read mesh from file:\n '";
+			msg += fname;
+			msg += "'";
+			QMessageBox::critical(NULL, windowTitle(), msg);
+		}
+	}
+	if (fname.isEmpty() || !MeshViewer->openMesh(fname.toLocal8Bit())) 
+	{
+		QString msg = "Cannot read mesh from file:\n '";
+		msg += fname;
+		msg += "'";
+		QMessageBox::critical(NULL, windowTitle(), msg);
+	}
+	else
+	{
+		LoadMeshSuccess = true;
+		MeshViewer->setDrawMode(InteractiveViewerWidget::FLAT_POINTS);
+		MeshViewer->setMouseMode(InteractiveViewerWidget::TRANS);
+		if(LoadMeshSuccess)
+		{
+			SetMeshForALL();
+		}
+		emit(haveLoadMesh(fname));
+	}
 }

@@ -4,7 +4,35 @@
 #include <OpenMesh/Core/Geometry/VectorT.hh>
 //#include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
 #include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
+struct Mesh_Feature
+{//ground-truth feature
+	Mesh tri;
+	vector<int> V_map, V_map_reverse;
 
+	vector<Vector3d> Tcenters;
+	double ave_length;
+	double angle_threshold = 0;
+	bool orphan_curve = true;
+	bool orphan_curve_single = true;
+	//read_from_file 
+	bool read_from_file = false;
+	vector<vector<uint32_t>> IN_v_pairs;
+	vector<uint32_t> IN_corners;
+	vector<bool> E_feature_flag;
+
+	vector<uint32_t> corners;
+	vector<vector<uint32_t>> corner_curves;
+
+
+	vector<vector<uint32_t>> curve_vs;
+	vector<vector<uint32_t>> curve_es;
+	vector<bool> broken_curves;
+	vector<bool> circles;//true -- circle, false -- not circle
+
+	MatrixXd normal_V, normal_Tri;
+
+	vector<int> v_types;//Regular --> V, edge -- curve id, corner -- V
+};
 struct MeshTraits : public OpenMesh::DefaultTraits
 {
 	typedef OpenMesh::Vec3d Point;

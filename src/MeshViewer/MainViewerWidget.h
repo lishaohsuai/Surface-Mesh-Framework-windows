@@ -135,6 +135,8 @@ public slots:
 	//
 	void print_info();
 
+	void open_fgraph();
+
 signals:
 	void haveLoadMesh(QString filePath);
 	void setMouseMode_signal_main(int);

@@ -23,6 +23,7 @@ private:
 
 signals:
 	void print_info_signal();
+	void open_fgraph_signal();
 
 private:
 	QWidget* Basic_Operation_And_Information;
@@ -30,6 +31,7 @@ private:
 
 	QLabel* leftLabel_BOI;
 	QPushButton* print_info;
+	QPushButton* open_fgraph;
 
 private:
 	void create_Basic_Operation_Information_Widget();
