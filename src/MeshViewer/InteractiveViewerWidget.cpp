@@ -4,7 +4,7 @@
 #include <QDropEvent>
 #include <QtCore>
 #include <QUrl>
-
+#include <fstream>
 #include "InteractiveViewerWidget.h"
 
 InteractiveViewerWidget::InteractiveViewerWidget(QWidget* parent /* = 0 */)
@@ -606,4 +606,43 @@ void InteractiveViewerWidget::render_text_slot(OpenMesh::Vec3d pos, QString str)
 	int y = viewport[3]-(long)winY;
 	render_text(x,y,str);*/
 	render_text(pos[0],pos[1],pos[2],str);
+}
+
+
+bool InteractiveViewerWidget::open_fgraph_impl(QString fileName){
+	std::fstream f(fileName.toLocal8Bit(), std::ios::in);
+	Mesh_Feature mf;
+	if (f.fail()) return false;
+	char s[1024]; int cnum = 0, edgenum=0;
+	f.getline(s, 1023);
+	sscanf(s, "%lf %i %i", &mf.angle_threshold, &mf.orphan_curve, &mf.orphan_curve_single);
+	f.getline(s, 1023);
+	sscanf(s, "%i %i", &cnum, &edgenum);
+	mf.IN_corners.resize(cnum);
+	for (int i = 0; i < cnum; i++) {
+		f.getline(s, 1023);
+		sscanf(s, "%i", &(mf.IN_corners[i]));
+	}
+	mf.IN_v_pairs.resize(edgenum);
+	for (int i = 0; i < edgenum; i++) {
+		f.getline(s, 1023);
+		int v0 = -1, v1 = -1;
+		sscanf(s, "%i %i", &v0, &v1);
+		mf.IN_v_pairs[i].push_back(v0);
+		mf.IN_v_pairs[i].push_back(v1);
+	}
+	f.close();
+	// put want point
+	for(int i=0; i<mf.IN_corners.size(); i++){
+		selectedVertex.push_back(mf.IN_corners[i]);
+	}
+	for(int i=0; i<mf.IN_v_pairs.size(); i++){
+		int a = mf.IN_v_pairs[i][0];
+		int b = mf.IN_v_pairs[i][1];
+		Mesh::HalfedgeHandle heh = mesh.find_halfedge(mesh.vertex_handle(a), mesh.vertex_handle(b));
+		if (heh.is_valid()) {
+			selectedEdge.push_back(mesh.edge_handle(heh).idx());
+		}
+	}
+	return true;
 }

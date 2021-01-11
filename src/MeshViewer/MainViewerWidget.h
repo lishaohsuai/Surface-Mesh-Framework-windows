@@ -134,7 +134,7 @@ public slots:
 
 	//
 	void print_info();
-
+	// 
 	void open_fgraph();
 
 signals:

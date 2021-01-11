@@ -4,9 +4,14 @@
 #include <OpenMesh/Core/Geometry/VectorT.hh>
 //#include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
 #include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
+#include <stdint.h>
+#include <Eigen/Core>
+#include <vector>
+using namespace std;
+using namespace Eigen;
 struct Mesh_Feature
 {//ground-truth feature
-	Mesh tri;
+	//Mesh tri;
 	vector<int> V_map, V_map_reverse;
 
 	vector<Vector3d> Tcenters;

@@ -63,6 +63,9 @@ public:
 		}
 		updateGL();
 	}
+	// lee:here to decode fgraph
+	bool open_fgraph_impl(QString fileName);
+
 
 signals:
 	void mouse_press_signal(Mesh::Point P);
@@ -120,7 +123,7 @@ protected:
 
 protected:
 	double selectedPoint[3];
-	std::vector<int> selectedVertex;
+	std::vector<int> selectedVertex; // lee:put here
 	int lastestVertex;
 	std::vector<int> selectedFace;
 	int lastestFace;

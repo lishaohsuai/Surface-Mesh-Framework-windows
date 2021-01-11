@@ -27,3 +27,9 @@ Open **SurfaceFramework.sln**, select **SrufaceFramework** as launch project, an
 ## Supported File Formats
 
 .obj .off .ply .stl# Surface-Mesh-Framework-windows
+
+## 可以读取特征点和特征边文件
+
+先选中特诊边和特征点的选取按键，然后点击读取相关特征文件
+
+
